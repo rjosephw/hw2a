@@ -1,0 +1,10 @@
+CREATE VIEW StudentPairs AS
+SELECT MIN(s1.SID) AS SID1, MAX(s2.SID) AS SID2
+FROM Students s1
+INNER JOIN Enrollments e1 ON s1.SID = e1.SID
+INNER JOIN Courses c ON e1.CID = c.CID
+INNER JOIN Enrollments e2 ON s1.SID <> e2.SID
+INNER JOIN Students s2 ON e2.SID = s2.SID
+WHERE s1.SID < s2.SID
+AND c.CID IN (SELECT e3.CID FROM Enrollments e3 WHERE e3.SID = s1.SID AND e3.SID = s2.SID)
+AND (s1.SID, s2.SID) NOT IN (SELECT m1.SID, m2.SID FROM Members m1 JOIN Members m2 ON m1.PID = m2.PID WHERE m1.SID <> m2.SID);

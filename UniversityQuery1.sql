@@ -1,0 +1,8 @@
+SELECT c.CID
+FROM Courses c
+INNER JOIN Enrollments e ON c.CID = e.CID
+INNER JOIN Students s ON e.SID = s.SID
+WHERE COALESCE(s.Major, 'Non-CS') <> 'CS'
+GROUP BY c.CID
+HAVING COUNT(*) < 10
+ORDER BY c.CID DESC;
